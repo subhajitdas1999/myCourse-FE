@@ -13,12 +13,12 @@ function App() {
       "description": "Test Transaction",
       "order_id": orderData.id, 
       "handler": function (response : any){
-        const responseData = {
-          razorpay_payment_id:response.razorpay_payment_id,
-          razorpay_order_id:response.razorpay_order_id,
-          razorpay_signature:response.razorpay_signature
-        }
-        axios.post("http://localhost:3000/payment/verify",responseData).then((res)=>{
+        // const responseData = {
+        //   razorpay_payment_id:response.razorpay_payment_id,
+        //   razorpay_order_id:response.razorpay_order_id,
+        //   razorpay_signature:response.razorpay_signature
+        // }
+        axios.get(`http://localhost:3000/payment/${response.razorpay_payment_id}`).then((res)=>{
           console.log(res);
           
         }).catch(err =>{
@@ -64,7 +64,9 @@ function App() {
   }
   return (
     <>
-      <p>Hallo world</p>
+      <h1 className="text-3xl font-bold underline">
+      Hello world!
+    </h1>
       <button onClick={() => handlePayment(10)}>buyNow</button>
     </>
   )
