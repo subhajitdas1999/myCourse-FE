@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axiosInstance from "./AxiosInstance";
 
 const Header = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
@@ -6,9 +7,9 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [userDataForAuth, setUserDataForAuth] = useState({
-    userName: "",
-    email: "",
-    password: "",
+    userName: "s",
+    email: "s@gmail.com",
+    password: "s",
   });
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -51,7 +52,24 @@ const Header = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSignUp = async (e: any) => {
     e.preventDefault();
-    console.log(userDataForAuth);
+    // console.log(userDataForAuth);
+    const signupData = {
+      userName: userDataForAuth.userName,
+      email: userDataForAuth.email,
+      password: userDataForAuth.password,
+    };
+
+    try {
+      const response = await axiosInstance.post("auth/signup", signupData);
+      console.log(response);
+
+      // Handle success response here
+      setIsLoggedIn(true);
+      setIsSignUpOpen(false);
+    } catch (error) {
+      // Handle error response here
+      console.error(error);
+    }
 
     // Perform sign up logic
     setIsLoggedIn(true);
