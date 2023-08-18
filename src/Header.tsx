@@ -74,11 +74,11 @@ const Header = () => {
     // Perform sign up logic
     setIsLoggedIn(true);
     setIsSignUpOpen(false);
-    setUserDataForAuth({
-      userName: "",
-      email: "",
-      password: "",
-    });
+    // setUserDataForAuth({
+    //   userName: "",
+    //   email: "",
+    //   password: "",
+    // });
   };
 
   const handleLogIn = () => {
