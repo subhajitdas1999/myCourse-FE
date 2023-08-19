@@ -7,9 +7,9 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [userDataForAuth, setUserDataForAuth] = useState({
-    userName: "s",
-    email: "s@gmail.com",
-    password: "s",
+    userName: "Subhajit",
+    email: "Subhajit@gmail.com",
+    password: "Subhajit123",
   });
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -60,12 +60,12 @@ const Header = () => {
     };
 
     try {
-      const response = await axiosInstance.post("auth/signup", signupData);
+      const response = await axiosInstance.post("auth/signup", signupData, {
+        withCredentials: true,
+      });
       console.log(response);
 
       // Handle success response here
-      setIsLoggedIn(true);
-      setIsSignUpOpen(false);
     } catch (error) {
       // Handle error response here
       console.error(error);
@@ -74,20 +74,52 @@ const Header = () => {
     // Perform sign up logic
     setIsLoggedIn(true);
     setIsSignUpOpen(false);
-    // setUserDataForAuth({
-    //   userName: "",
-    //   email: "",
-    //   password: "",
-    // });
+    setUserDataForAuth({
+      userName: "",
+      email: "",
+      password: "",
+    });
   };
 
-  const handleLogIn = () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleLogIn = async (e: any) => {
+    e.preventDefault();
+    const logInData = {
+      email: userDataForAuth.email,
+      password: userDataForAuth.password,
+    };
+    try {
+      const response = await axiosInstance.post("auth/login", logInData, {
+        withCredentials: true,
+      });
+      console.log(response);
+
+      // Handle success response here
+    } catch (error) {
+      // Handle error response here
+      console.error(error);
+    }
     // Perform log in logic
     setIsLoggedIn(true);
     setIsLogInOpen(false);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      const response = await axiosInstance.post(
+        "auth/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+
+      // Handle success response here
+    } catch (error) {
+      // Handle error response here
+      console.error(error);
+    }
     // Perform logout logic
     setIsLoggedIn(false);
   };
