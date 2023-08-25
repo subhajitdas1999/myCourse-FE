@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CourseCard from "./CourseCard";
 import axiosInstance from "./AxiosInstance";
+import DummyCourseCard from "./DummyCourseCard";
 
 interface Course {
   id: number;
@@ -12,6 +13,7 @@ interface Course {
 
 const Courses: React.FC = () => {
   const [coursesData, setCoursesData] = useState<Course[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // Fetch data from the backend using Axios
     axiosInstance
@@ -19,11 +21,12 @@ const Courses: React.FC = () => {
       .then((response) => {
         setCoursesData(response.data);
         // console.log(response.data);
-
+        setIsLoading(false);
         // setCoursesData(response.data);
       })
       .catch((error) => {
         console.error(error);
+        setIsLoading(false);
       });
   }, []);
   return (
@@ -31,9 +34,15 @@ const Courses: React.FC = () => {
       <div className="container mx-auto">
         <h1 className="text-3xl font-semibold text-white mb-8">Courses</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {coursesData.map((course) => (
-            <CourseCard key={course.id} course={course} />
-          ))}
+          {isLoading
+            ? // Render dummy card while loading
+              Array.from({ length: 3 }).map((_, index) => (
+                <DummyCourseCard key={index} />
+              ))
+            : // Render actual course cards after data is fetched
+              coursesData.map((course) => (
+                <CourseCard key={course.id} course={course} />
+              ))}
         </div>
       </div>
     </div>
