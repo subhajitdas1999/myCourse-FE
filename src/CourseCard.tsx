@@ -12,7 +12,7 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   return (
-    <div className="bg-dark p-4 rounded-lg shadow-md text-white ">
+    <div className="bg-dark p-4 rounded-lg shadow-md text-white border-solid border-2 border-gray-400">
       <img
         src={course.courseImageUrl}
         alt={course.title}
