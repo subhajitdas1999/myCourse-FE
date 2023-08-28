@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 interface Course {
   id: number;
   title: string;
@@ -25,9 +27,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         {course.description}
       </p>
       <div className="flex justify-between items-center">
-        <button className="bg-violet text-white px-4 py-2 rounded hover:bg-gray-700">
-          Enroll Now
-        </button>
+        <Link to={`/courses/${course.id}`}>
+          <button className="bg-violet text-white px-4 py-2 rounded hover:bg-gray-700">
+            Enroll Now
+          </button>
+        </Link>
         <p className="text-gray-300 text-xl">₹{course.price} /-</p>
       </div>
     </div>
