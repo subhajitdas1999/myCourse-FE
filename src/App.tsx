@@ -1,13 +1,19 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Courses from "./Courses.tsx";
 import Header from "./Header.tsx";
+import CourseDetail from "./CourseDetail.tsx";
 
 function App() {
   return (
-    <div className=" bg-dark h-screen w-screen px-10 py-5">
-      <Header />
-      <Courses />
-      {/* Your main content */}
-    </div>
+    <Router>
+      <div className=" bg-dark h-full px-10 py-5">
+        <Header />
+        <Routes>
+          <Route path="/" Component={Courses} />
+          <Route path="/courses/:courseId" Component={CourseDetail} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
