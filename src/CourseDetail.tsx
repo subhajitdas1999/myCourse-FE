@@ -31,42 +31,40 @@ const CourseDetail: React.FC = () => {
   }
 
   return (
-    <div className="bg-dark-violet min-h-screen py-16">
+    <div className="bg-dark-violet py-16  text-white">
       <div className="container mx-auto">
         <div className="flex md:gap-8">
-          <div className="relative h-[400px] bg-gray-700 rounded-md overflow-hidden md:w-[50%]">
+          <div className="h-[400px] bg-gray-700 rounded-md overflow-hidden md:w-[50%]">
             <img
               src={courseDetail.courseImageUrl}
               alt={courseDetail.title}
               className="h-full w-full rounded-md object-cover"
             />
-            <div className="absolute bottom-0 p-4 w-full bg-opacity-75 bg-black text-white">
-              <h1 className="text-3xl font-semibold mb-2">
+
+            <div className="absolute mt-10 w-[45%] ">
+              <p className="text-2xl font-semibold mb-2">
                 {courseDetail.title}
-              </h1>
-              <p className="text-gray-300">{courseDetail.description}</p>
+              </p>
+              <p className="text-gray-300 my-5 ">{courseDetail.description}</p>
+              <button className="bg-violet px-4 py-2 block mx-auto rounded hover:bg-gray-700">
+                Enroll Now
+              </button>
             </div>
-            <div className="bg-dark-violet text-white mt-4 p-4">
+
+            <div className="bg-dark-violet mt-4 p-4">
               <p>This is additional text at the end of the image div.</p>
             </div>
           </div>
           <div className="md:w-[50%]">
-            <p className="text-gray-300 mb-4">
-              This is a dummy line. Repeat this content for as many lines as
-              needed.
-            </p>
-            {/* Add more <p> tags here */}
+            {Array(2)
+              .fill(null)
+              .map(() => (
+                <p className="text-gray-300 mb-4">
+                  This is a dummy line. Repeat this content for as many lines as
+                  needed.
+                </p>
+              ))}
           </div>
-        </div>
-        {/* Additional text div outside of the image div */}
-        {/* <div className="bg-dark-violet text-white mt-4 p-4">
-          <p>This is additional text at the end of the image div.</p>
-        </div> */}
-        <div className="flex justify-between items-center mt-4">
-          <button className="bg-violet text-white px-4 py-2 rounded hover:bg-gray-700">
-            Enroll Now
-          </button>
-          <p className="text-gray-300">{courseDetail.price}</p>
         </div>
       </div>
     </div>
