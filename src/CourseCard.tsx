@@ -27,7 +27,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         {course.description}
       </p>
       <div className="flex justify-between items-center">
-        <Link to={`/courses/${course.id}`}>
+        <Link to={`/courses/${course.id}`} state={{ courseDetail: course }}>
           <button className="bg-violet text-white px-4 py-2 rounded hover:bg-gray-700">
             Enroll Now
           </button>
