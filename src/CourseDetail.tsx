@@ -1,5 +1,6 @@
+// import { useEffect, useState } from "react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axiosInstance from "./AxiosInstance";
 
 interface CourseDetail {
@@ -10,21 +11,31 @@ interface CourseDetail {
   price: string; // Assuming price is a string, adjust type if needed
 }
 
+interface VideoContent {
+  id: string;
+  title: string;
+  videoName: string;
+  videoNo: string;
+  courseId: string;
+}
+
 const CourseDetail: React.FC = () => {
-  const { courseId } = useParams<{ courseId: string }>();
-  const [courseDetail, setCourseDetail] = useState<CourseDetail | null>(null);
+  // const { courseId } = useParams<{ courseId: string }>();
+  const location = useLocation();
+  const courseDetail = location.state?.courseDetail as CourseDetail;
+  const [videoContents, setVideoContents] = useState<VideoContent[]>([]);
 
   useEffect(() => {
     // Fetch course details from the backend using Axios
     axiosInstance
-      .get(`course/${courseId}`)
+      .get(`video/course/${courseDetail.id}`)
       .then((response) => {
-        setCourseDetail(response.data);
+        setVideoContents(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
-  }, [courseId]);
+  }, [courseDetail.id]);
 
   if (!courseDetail) {
     return <div>Loading...</div>;
@@ -51,19 +62,19 @@ const CourseDetail: React.FC = () => {
               </button>
             </div>
 
-            <div className="bg-dark-violet mt-4 p-4">
+            {/* <div className="bg-dark-violet mt-4 p-4">
               <p>This is additional text at the end of the image div.</p>
-            </div>
+            </div> */}
           </div>
           <div className="md:w-[50%]">
-            {Array(2)
+            {/* {Array(3)
               .fill(null)
               .map(() => (
                 <p className="text-gray-300 mb-4">
                   This is a dummy line. Repeat this content for as many lines as
                   needed.
                 </p>
-              ))}
+              ))} */}
           </div>
         </div>
       </div>
