@@ -1,6 +1,6 @@
 // import { useEffect, useState } from "react";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axiosInstance from "./AxiosInstance";
 
 interface CourseDetail {
@@ -24,6 +24,7 @@ const CourseDetail: React.FC = () => {
   const location = useLocation();
   const courseDetail = location.state?.courseDetail as CourseDetail;
   const [videoContents, setVideoContents] = useState<VideoContent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch course details from the backend using Axios
@@ -31,6 +32,7 @@ const CourseDetail: React.FC = () => {
       .get(`video/course/${courseDetail.id}`)
       .then((response) => {
         setVideoContents(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error(error);
@@ -67,14 +69,24 @@ const CourseDetail: React.FC = () => {
             </div> */}
           </div>
           <div className="md:w-[50%]">
-            {/* {Array(3)
-              .fill(null)
-              .map(() => (
-                <p className="text-gray-300 mb-4">
-                  This is a dummy line. Repeat this content for as many lines as
-                  needed.
-                </p>
-              ))} */}
+            {loading ? (
+              <div className="bg-dark rounded-lg shadow-md text-white animate-pulse h-[280px] w-2/4">
+                <h2 className="text-xl font-semibold mb-4 bg-gray-700 h-6 rounded"></h2>
+                <h2 className="text-xl font-semibold mb-4 bg-gray-700 h-6 rounded"></h2>
+                <h2 className="text-xl font-semibold mb-4 bg-gray-700 h-6 rounded"></h2>
+              </div>
+            ) : (
+              videoContents.map((video) => (
+                <Link
+                  to={`/courses/${courseDetail.id}/${video.id}`}
+                  state={{ videoDetail: video }}
+                >
+                  <p key={video.id} className="text-gray-300 mb-4 w-fit">
+                    {video.videoNo}. {video.title}
+                  </p>
+                </Link>
+              ))
+            )}
           </div>
         </div>
       </div>
