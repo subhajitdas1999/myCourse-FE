@@ -5,7 +5,6 @@ const DummyCourseCard: React.FC = () => {
       <h2 className="text-xl font-semibold mb-2 bg-gray-700 h-6 rounded"></h2>
       <div className="flex justify-between items-center">
         <button className="bg-violet text-white px-4 py-2 rounded hover:bg-gray-700"></button>
-        <p className="text-gray-300"></p>
       </div>
     </div>
   );
