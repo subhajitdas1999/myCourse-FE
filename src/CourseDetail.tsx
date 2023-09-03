@@ -63,10 +63,6 @@ const CourseDetail: React.FC = () => {
                 Enroll Now
               </button>
             </div>
-
-            {/* <div className="bg-dark-violet mt-4 p-4">
-              <p>This is additional text at the end of the image div.</p>
-            </div> */}
           </div>
           <div className="md:w-[50%]">
             {loading ? (
@@ -79,7 +75,12 @@ const CourseDetail: React.FC = () => {
               videoContents.map((video) => (
                 <Link
                   to={`/courses/${courseDetail.id}/${video.id}`}
-                  state={{ videoDetail: video }}
+                  state={{
+                    videoDetail: video,
+                    videoContents,
+                    courseId: courseDetail.id,
+                  }}
+                  key={video.id}
                 >
                   <p key={video.id} className="text-gray-300 mb-4 w-fit">
                     {video.videoNo}. {video.title}
