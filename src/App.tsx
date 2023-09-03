@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Courses from "./Courses.tsx";
 import Header from "./Header.tsx";
 import CourseDetail from "./CourseDetail.tsx";
+import VideoDisplay from "./VideoDisplay.tsx";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" Component={Courses} />
           <Route path="/courses/:courseId" Component={CourseDetail} />
+          <Route path="/courses/:courseId/:videoId" Component={VideoDisplay} />
         </Routes>
       </div>
     </Router>
