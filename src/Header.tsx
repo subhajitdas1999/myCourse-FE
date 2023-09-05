@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axiosInstance from "./AxiosInstance";
+import { Link } from "react-router-dom";
+import { AuthContext } from "./App";
 
 const Header = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLogInOpen, setIsLogInOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)!;
   const [showPassword, setShowPassword] = useState(false);
   const [userDataForAuth, setUserDataForAuth] = useState({
     userName: "Subhajit",
@@ -63,7 +65,7 @@ const Header = () => {
       const response = await axiosInstance.post("auth/signup", signupData, {
         withCredentials: true,
       });
-      console.log(response);
+      console.log("response from signup", response);
 
       // Handle success response here
     } catch (error) {
@@ -92,7 +94,8 @@ const Header = () => {
       const response = await axiosInstance.post("auth/login", logInData, {
         withCredentials: true,
       });
-      console.log(response);
+      // console.log(response);
+      console.log("response from login", response);
 
       // Handle success response here
     } catch (error) {
@@ -127,7 +130,9 @@ const Header = () => {
   return (
     <header className="text-white p-4 border-2 border-white border-solid">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-xl font-semibold">Home</h1>
+        <Link to={"/"}>
+          <h1 className="text-xl font-semibold">Home</h1>
+        </Link>
         <nav className="">
           {isLoggedIn ? (
             <ul className="flex space-x-4">
