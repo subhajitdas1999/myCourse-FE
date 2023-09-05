@@ -21,13 +21,15 @@ const VideoDisplay: React.FC = () => {
 
   useEffect(() => {
     // Make a request to get the signed URL from your server
+    //setting this to " ", because when re-rendering the useEffect on videoDetail.id , it's starts the video with old url due to
+    // async func call , that why setting it to default until we get proper url.
+    setSignedVideoUrl("");
+
     axiosInstance
       .get(`video/${videoDetail.videoName}`)
       .then((response) => {
-        console.log("here");
-
         setSignedVideoUrl(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
