@@ -7,7 +7,7 @@ import { Dispatch, SetStateAction, createContext, useState } from "react";
 
 interface User {
   // Define the structure of your user object here
-  id: string;
+  email: string;
   username: string;
   // ... other properties
 }
