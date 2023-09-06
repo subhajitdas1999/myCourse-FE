@@ -1,7 +1,8 @@
 // import { useEffect, useState } from "react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axiosInstance from "./AxiosInstance";
+import { AuthContext } from "./App";
 
 interface CourseDetail {
   id: number;
@@ -25,6 +26,7 @@ const CourseDetail: React.FC = () => {
   const courseDetail = location.state?.courseDetail as CourseDetail;
   const [videoContents, setVideoContents] = useState<VideoContent[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isLoggedIn, setUser, setIsLoggedIn } = useContext(AuthContext)!;
 
   useEffect(() => {
     // Fetch course details from the backend using Axios
@@ -74,7 +76,17 @@ const CourseDetail: React.FC = () => {
             ) : (
               videoContents.map((video) => (
                 <Link
-                  to={`/courses/${courseDetail.id}/${video.id}`}
+                  // to={`/courses/${courseDetail.id}/${video.id}`}
+                  to={
+                    isLoggedIn
+                      ? `/courses/${courseDetail.id}/${video.id}`
+                      : "/#"
+                  }
+                  className={`${
+                    isLoggedIn
+                      ? "bg-blue-500 hover:bg-blue-600 text-white"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
                   state={{
                     videoDetail: video,
                     videoContents,
