@@ -1,18 +1,34 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axiosInstance from "./AxiosInstance";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./App";
 
-const Header = () => {
+const Header: React.FC = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [isLogInOpen, setIsLogInOpen] = useState(false);
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext)!;
+  const { isLoggedIn, setUser, setIsLoggedIn } = useContext(AuthContext)!;
   const [showPassword, setShowPassword] = useState(false);
   const [userDataForAuth, setUserDataForAuth] = useState({
     userName: "Subhajit",
-    email: "Subhajit@gmail.com",
+    email: "Subhajit1@gmail.com",
     password: "Subhajit123",
   });
+  useEffect(() => {
+    // Fetch loggedIndetails details from the backend using Axios
+    axiosInstance
+      .get(`auth/isLoggedIn`, { withCredentials: true })
+      .then((response) => {
+        // console.log(response.data);
+        setIsLoggedIn(true);
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoggedIn(false);
+        setUser(null);
+      });
+  }, []);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -65,7 +81,8 @@ const Header = () => {
       const response = await axiosInstance.post("auth/signup", signupData, {
         withCredentials: true,
       });
-      console.log("response from signup", response);
+      setUser(response.data);
+      // console.log("response from signup", response);
 
       // Handle success response here
     } catch (error) {
@@ -95,7 +112,8 @@ const Header = () => {
         withCredentials: true,
       });
       // console.log(response);
-      console.log("response from login", response);
+      setUser(response.data);
+      // console.log("response from login", response);
 
       // Handle success response here
     } catch (error) {
@@ -109,14 +127,15 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axiosInstance.post(
+      await axiosInstance.post(
         "auth/logout",
         {},
         {
           withCredentials: true,
         }
       );
-      console.log(response);
+      setUser(null);
+      // console.log(response);
 
       // Handle success response here
     } catch (error) {
