@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import { useEffect, useState } from "react";
 import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaLock, FaUnlock } from "react-icons/fa";
 import axiosInstance from "./AxiosInstance";
 import { AuthContext } from "./App";
+import "./SuccessAnimation.css";
 
 interface CourseDetail {
   id: number;
@@ -28,7 +30,10 @@ const CourseDetail: React.FC = () => {
   const [videoContents, setVideoContents] = useState<VideoContent[]>([]);
   const [loading, setLoading] = useState(true);
   const [coursePurchased, setCoursePurchased] = useState(false);
-  const { isLoggedIn } = useContext(AuthContext)!;
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(false);
+
+  const { isLoggedIn, user } = useContext(AuthContext)!;
 
   useEffect(() => {
     // Fetch course details from the backend using Axios
@@ -54,13 +59,94 @@ const CourseDetail: React.FC = () => {
           });
     }
   }, [courseDetail.id, isLoggedIn]);
-
+  // Function to trigger the animation
+  const triggerAnimation = () => {
+    setShowAnimation(true);
+    setTimeout(() => {
+      setShowAnimation(false);
+      // window.location.reload();
+    }, 2000); // Hide the animation after 2 seconds
+  };
   if (!courseDetail) {
     return <div>Loading...</div>;
   }
+  const handleOpenRazorpay = (orderData: any) => {
+    const options = {
+      key: import.meta.env.VITE_RAZORYPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+      amount: orderData.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: orderData.currency,
+      name: "Subhajit's Course", //your business name
+      description: courseDetail.title,
+      order_id: orderData.id,
+      handler: function (response: any) {
+        // const responseData = {
+        //   razorpay_payment_id:response.razorpay_payment_id,
+        //   razorpay_order_id:response.razorpay_order_id,
+        //   razorpay_signature:response.razorpay_signature
+        // }
+        axiosInstance
+          .get(`purchase/${response.razorpay_payment_id}`, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            if (res.data === "captured") {
+              // console.log("yes payment done");
+              triggerAnimation();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature)
+      },
+      prefill: {
+        //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+        name: user?.username, //your customer's name
+        email: user?.email,
+        // contact: "9000090#3399cc000", //Provide the customer's phone number for better conversion rates
+      },
+      notes: {
+        // address: "India",
+        courseId: courseDetail.id,
+        email: user?.email,
+        price: courseDetail.price,
+      },
+      theme: {
+        color: "#0e2255",
+      },
+    };
+
+    const rzp1 = new (window as any).Razorpay(options);
+
+    rzp1.open();
+    // rzp1.on('payment.failed', function (response) {
+    //   // Handle payment failure here
+    //   console.log(response.error);
+    // })
+  };
+
+  const handleEnroll = async () => {
+    if (!isLoggedIn) {
+      //return the modal screen
+      setShowMessageModal(true);
+      return;
+    }
+
+    const reqBody = { amount: courseDetail.price };
+    const res = await axiosInstance.post("purchase/createOrder", reqBody, {
+      withCredentials: true,
+    });
+
+    handleOpenRazorpay(res.data);
+    // console.log(res.data);
+  };
 
   return (
     <div className="bg-dark-violet py-16  text-white">
+      <button onClick={triggerAnimation}>test</button>
       <div className="container mx-auto">
         <div className="flex md:gap-8">
           <div className="h-[400px] bg-gray-700 rounded-md overflow-hidden md:w-[50%]">
@@ -76,7 +162,10 @@ const CourseDetail: React.FC = () => {
               </p>
               <p className="text-gray-300 my-5 ">{courseDetail.description}</p>
               {!(isLoggedIn && coursePurchased) && (
-                <button className="bg-violet px-4 py-2 block mx-auto rounded hover:bg-gray-700">
+                <button
+                  className="bg-violet px-4 py-2 block mx-auto rounded hover:bg-gray-700"
+                  onClick={handleEnroll}
+                >
                   Enroll Now
                 </button>
               )}
@@ -127,6 +216,30 @@ const CourseDetail: React.FC = () => {
           </div>
         </div>
       </div>
+      {/* Modal */}
+      {showMessageModal && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-opacity-50 bg-gray-800">
+          <div className="bg-gray-700 p-4 rounded shadow-lg">
+            <p>User must be logged in to enroll.</p>
+            <button
+              onClick={() => setShowMessageModal(false)}
+              className="bg-violet px-4 py-2 rounded hover:bg-gray-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+      {/* Success Animation */}
+      {showAnimation && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center">
+          <div className="bg-green-500 p-8 rounded-lg shadow-lg text-center animate-party-blast">
+            <p className="text-xl mb-4 font-semibold">Congratulations!!</p>
+            <div className="text-4xl mb-4">🎉</div>
+            <p className="text-xl font-semibold">Enjoy your course!!</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
