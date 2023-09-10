@@ -8,10 +8,16 @@ const Header: React.FC = () => {
   const [isLogInOpen, setIsLogInOpen] = useState(false);
   const { isLoggedIn, setUser, setIsLoggedIn } = useContext(AuthContext)!;
   const [showPassword, setShowPassword] = useState(false);
+  // const [userDataForAuth, setUserDataForAuth] = useState({
+  //   userName: "Subhajit",
+  //   email: "Subhajit1@gmail.com",
+  //   password: "Subhajit123",
+  // });
+
   const [userDataForAuth, setUserDataForAuth] = useState({
-    userName: "Subhajit",
-    email: "Subhajit1@gmail.com",
-    password: "Subhajit123",
+    userName: "",
+    email: "",
+    password: "",
   });
   useEffect(() => {
     // Fetch loggedIndetails details from the backend using Axios
