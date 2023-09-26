@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import CourseCard from "./CourseCard";
-import axiosInstance from "./AxiosInstance";
 import DummyCourseCard from "./DummyCourseCard";
+import axios from "axios";
 
 interface Course {
   id: number;
@@ -16,8 +16,8 @@ const Courses: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     // Fetch data from the backend using Axios
-    axiosInstance
-      .get("course")
+    axios
+      .get("/api/course")
       .then((response) => {
         setCoursesData(response.data);
         // console.log(response.data);

@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import axiosInstance from "./AxiosInstance";
+// import axiosInstance from "./AxiosInstance";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./App";
+import axios from "axios";
 
 const Header: React.FC = () => {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
@@ -21,8 +22,8 @@ const Header: React.FC = () => {
   });
   useEffect(() => {
     // Fetch loggedIndetails details from the backend using Axios
-    axiosInstance
-      .get(`auth/isLoggedIn`, { withCredentials: true })
+    axios
+      .get(`/api/auth/isLoggedIn`, { withCredentials: true })
       .then((response) => {
         // console.log(response.data);
         setIsLoggedIn(true);
@@ -84,9 +85,7 @@ const Header: React.FC = () => {
     };
 
     try {
-      const response = await axiosInstance.post("auth/signup", signupData, {
-        withCredentials: true,
-      });
+      const response = await axios.post("/api/auth/signup", signupData);
       setUser(response.data);
       // console.log("response from signup", response);
 
@@ -114,7 +113,7 @@ const Header: React.FC = () => {
       password: userDataForAuth.password,
     };
     try {
-      const response = await axiosInstance.post("auth/login", logInData, {
+      const response = await axios.post("/api/auth/login", logInData, {
         withCredentials: true,
       });
       // console.log(response);
@@ -133,8 +132,8 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await axiosInstance.post(
-        "auth/logout",
+      await axios.post(
+        "/api/auth/logout",
         {},
         {
           withCredentials: true,
