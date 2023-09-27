@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "./AxiosInstance";
 import VideoPlayer from "./VideoPlayer";
 import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
 
 interface VideoContent {
   id: string;
@@ -25,8 +25,8 @@ const VideoDisplay: React.FC = () => {
     // async func call , that why setting it to default until we get proper url.
     setSignedVideoUrl("");
 
-    axiosInstance
-      .get(`video/${videoDetail.videoName}`)
+    axios
+      .get(`/api/video/${videoDetail.videoName}`)
       .then((response) => {
         setSignedVideoUrl(response.data);
         // console.log(response.data);

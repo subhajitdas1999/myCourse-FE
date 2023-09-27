@@ -3,9 +3,9 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaLock, FaUnlock } from "react-icons/fa";
-import axiosInstance from "./AxiosInstance";
 import { AuthContext } from "./App";
 import "./SuccessAnimation.css";
+import axios from "axios";
 
 interface CourseDetail {
   id: number;
@@ -37,8 +37,8 @@ const CourseDetail: React.FC = () => {
 
   useEffect(() => {
     // Fetch course details from the backend using Axios
-    axiosInstance
-      .get(`video/course/${courseDetail.id}`)
+    axios
+      .get(`/api/video/course/${courseDetail.id}`)
       .then((response) => {
         setVideoContents(response.data);
         setLoading(false);
@@ -48,8 +48,10 @@ const CourseDetail: React.FC = () => {
       });
     {
       isLoggedIn &&
-        axiosInstance
-          .get(`course/verify/${courseDetail.id}`, { withCredentials: true })
+        axios
+          .get(`/api/course/verify/${courseDetail.id}`, {
+            withCredentials: true,
+          })
           .then((response) => {
             // console.log(response.data.result);
             setCoursePurchased(response.data.result);
@@ -84,8 +86,8 @@ const CourseDetail: React.FC = () => {
         //   razorpay_order_id:response.razorpay_order_id,
         //   razorpay_signature:response.razorpay_signature
         // }
-        axiosInstance
-          .get(`purchase/${response.razorpay_payment_id}`, {
+        axios
+          .get(`/api/purchase/${response.razorpay_payment_id}`, {
             withCredentials: true,
           })
           .then((res) => {
@@ -136,7 +138,7 @@ const CourseDetail: React.FC = () => {
     }
 
     const reqBody = { amount: courseDetail.price };
-    const res = await axiosInstance.post("purchase/createOrder", reqBody, {
+    const res = await axios.post("/api/purchase/createOrder", reqBody, {
       withCredentials: true,
     });
 
