@@ -148,7 +148,6 @@ const CourseDetail: React.FC = () => {
 
   return (
     <div className="bg-dark-violet py-16  text-white">
-      <button onClick={triggerAnimation}>test</button>
       <div className="container mx-auto">
         <div className="flex md:gap-8">
           <div className="h-[400px] bg-gray-700 rounded-md overflow-hidden md:w-[50%]">
